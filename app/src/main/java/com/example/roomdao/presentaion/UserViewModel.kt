@@ -24,4 +24,17 @@ class UserViewModel : ViewModel() {
         }
     }
 
+    fun removeUser(user: User) {
+        viewModelScope.launch {
+            try {
+                repository.removeUser(user.id)
+            } catch (t: Throwable) {
+                Log.e("viewModel", "error with delete user ${t.message}")
+            }
+        }
+    }
+
+    //Реализовать сохранение, получение и обновление user и перейти к созданию экрана
+    //На этом первый урок всё, окончен
+
 }

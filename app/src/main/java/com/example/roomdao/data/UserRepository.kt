@@ -14,14 +14,21 @@ class UserRepository {
         userDao.insertUser(listOf(user))
     }
 
-    suspend fun getAllUsers(): List<User> {
-        return userDao.getAllUsers()
-    }
+    suspend fun getAllUsers() = userDao.getAllUsers()
+
+    suspend fun removeUser(userId: Long) = userDao.removeUserByID(userId = userId)
 
     private fun isUserValid(user: User): Boolean {
         return user.firstName.isNotBlank() && user.lastName.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(
             user.email
         ).matches()
+    }
+
+    suspend fun getUserById(userId: Long) = userDao.getUserById(userId)
+
+    suspend fun updateUser(user: User) {
+        if (isUserValid(user).not()) throw Exception("Incorrect user in save method")
+        userDao.updateUser(user)
     }
 
 }

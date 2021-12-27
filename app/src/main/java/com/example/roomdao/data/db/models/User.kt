@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = UserContract.TABLE_NAME)
 data class User(
-    @PrimaryKey
+    //Если указать id = 0, то ключ сгенерируется сам
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = UserContract.Columns.ID)
-    val id: Int,
+    val id: Long,
     @ColumnInfo(name = UserContract.Columns.FIRST_NAME)
     val firstName: String,
     @ColumnInfo(name = UserContract.Columns.LAST_NAME)

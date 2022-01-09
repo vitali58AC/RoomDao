@@ -14,6 +14,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
@@ -27,6 +29,8 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -94,5 +98,10 @@ dependencies {
     //implementation "androidx.room:room-runtime:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
 
+    //Compose material3
+    implementation "androidx.compose.material3:material3:1.0.0-alpha02"
+
+    //Работа со временем.
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
 }

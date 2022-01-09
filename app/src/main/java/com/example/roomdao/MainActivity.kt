@@ -3,46 +3,29 @@ package com.example.roomdao
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.toArgb
+import androidx.navigation.compose.rememberNavController
+import com.example.roomdao.compose.Navigation
+import com.example.roomdao.presentaion.UserViewModel
 import com.example.roomdao.ui.theme.RoomDaoTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val userViewModel: UserViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             RoomDaoTheme {
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("mr. Android")
+                    window.statusBarColor = MaterialTheme.colors.onPrimary.toArgb()
+                    Navigation(navController = navController, viewModel = userViewModel)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Column(
-        Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Hello $name!")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    RoomDaoTheme {
-        Greeting("Android")
     }
 }

@@ -2,7 +2,7 @@ package com.example.roomdao.data
 
 import android.util.Patterns
 import com.example.roomdao.data.db.Database
-import com.example.roomdao.data.db.models.User
+import com.example.roomdao.data.db.models.user.User
 
 class UserRepository {
 
@@ -19,7 +19,7 @@ class UserRepository {
     suspend fun removeUser(userId: Long) = userDao.removeUserByID(userId = userId)
 
     private fun isUserValid(user: User): Boolean {
-        return user.firstName.isNotBlank() && user.lastName.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(
+        return user.passwordHash.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(
             user.email
         ).matches()
     }

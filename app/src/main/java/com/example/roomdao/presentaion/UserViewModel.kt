@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roomdao.data.UserRepository
-import com.example.roomdao.data.db.models.User
+import com.example.roomdao.data.db.models.user.User
 import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
@@ -27,14 +27,11 @@ class UserViewModel : ViewModel() {
     fun removeUser(user: User) {
         viewModelScope.launch {
             try {
-                repository.removeUser(user.id)
+                repository.removeUser(user.userId)
             } catch (t: Throwable) {
                 Log.e("viewModel", "error with delete user ${t.message}")
             }
         }
     }
-
-    //Реализовать сохранение, получение и обновление user и перейти к созданию экрана
-    //На этом первый урок всё, окончен
 
 }

@@ -2,7 +2,11 @@ package com.example.roomdao.data.db.models.user
 
 import androidx.room.*
 
-@Entity(tableName = UserContract.TABLE_NAME)
+@Entity(
+    tableName = UserContract.TABLE_NAME,
+    //Для того, что бы сделать поле уникальным, нужно добавить на него индекс
+    indices = [Index(UserContract.Columns.EMAIL, unique = true)]
+)
 data class User(
     //Если указать id = 0, то ключ сгенерируется сам
     @PrimaryKey(autoGenerate = true)
@@ -12,29 +16,4 @@ data class User(
     val email: String,
     @ColumnInfo(name = UserContract.Columns.PASSWORD_HASH)
     val passwordHash: String
-)
-
-@Entity(tableName = UserContract.TABLE_PROFILE)
-data class UserProfile(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = UserContract.Columns.PROFILE_ID)
-    val profileId: Long,
-    @ColumnInfo(name = UserContract.Columns.FIRST_NAME)
-    val firstName: String,
-    @ColumnInfo(name = UserContract.Columns.LAST_NAME)
-    val lastName: String,
-    @ColumnInfo(name = UserContract.Columns.AVATAR)
-    val avatar: String?,
-    @ColumnInfo(name = UserContract.Columns.USER_OWNER_ID)
-    val userOwnerId: Long
-)
-
-//1-1 связь
-data class UserAndProfile(
-    @Embedded val user: User,
-    @Relation(
-        parentColumn = UserContract.Columns.USER_ID,
-        entityColumn = UserContract.Columns.USER_OWNER_ID
-    )
-    val profile: UserProfile
 )

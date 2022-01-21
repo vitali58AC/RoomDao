@@ -14,5 +14,5 @@ data class Products(
     @ColumnInfo(name = ProductContract.Columns.DESCRIPTION)
     val description: String,
     @ColumnInfo(name = ProductContract.Columns.IMAGE)
-    val image: String
+    val image: String?
 )

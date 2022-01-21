@@ -11,5 +11,8 @@ object ShoppingListContract {
         const val BOUGHT_AT = "bought_at"
         const val PRICE = "price"
         const val STATUS = "status"
+
+        //Shopping list cross ref const
+        const val SHOPPING_LIST_ID_CROSS_REF = "shopping_list_cross_ref"
     }
 }

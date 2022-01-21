@@ -13,5 +13,8 @@ object UserContract {
         const val PASSWORD_HASH = "password_hash"
         const val PROFILE_ID = "profile_id"
         const val USER_OWNER_ID = "USER_OWNER_ID"
+
+        //User cross ref
+        const val USER_ID_CROSS_REF = "user_id_cross_ref"
     }
 }

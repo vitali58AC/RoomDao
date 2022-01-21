@@ -1,14 +1,9 @@
 package com.example.roomdao.compose.login
 
-import androidx.compose.foundation.clickable
+import android.util.Patterns
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,44 +11,40 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.roomdao.R
-import com.example.roomdao.data.Fonts
-import com.example.roomdao.ui.theme.Blue
+import com.example.roomdao.compose.InputText
+import com.example.roomdao.compose.MaterialButton
+import com.example.roomdao.compose.TitleText
 import com.example.roomdao.ui.theme.RoomDaoTheme
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onRegisterClick: () -> Unit,
+    onLoginClick: (String, String) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "RoomDao",
-            fontWeight = FontWeight.Black,
-            fontSize = 45.sp,
-            fontFamily = Fonts.robotoFamily,
-            modifier = Modifier.padding(top = 60.dp)
-        )
-        LoginPart()
-        Text(
-            text = "Skip ->",
-            modifier = Modifier.clickable { /*TODO*/ },
-            color = MaterialTheme.colors.onPrimary
-        )
+        TitleText(title = "RoomDao", fontSize = 45.sp)
+        LoginPart(onRegisterClick, onLoginClick)
     }
 
 }
 
 @Composable
-fun ColumnScope.LoginPart() {
+fun ColumnScope.LoginPart(onRegisterClick: () -> Unit, onLoginClick: (String, String) -> Unit) {
+    var login by rememberSaveable { mutableStateOf("") }
+    var pass by rememberSaveable { mutableStateOf("") }
+    var correctInput by rememberSaveable { mutableStateOf(false) }
+    correctInput = validateLoginInput(login, pass)
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,49 +55,32 @@ fun ColumnScope.LoginPart() {
             fontSize = 13.sp,
             color = MaterialTheme.colors.onPrimary
         )
-        InputText(label = stringResource(R.string.login))
-        InputText(label = stringResource(R.string.password))
+        InputText(text = login, onChange = { login = it }, label = stringResource(R.string.email))
+        InputText(
+            text = pass,
+            onChange = { pass = it },
+            label = stringResource(R.string.password),
+            visualTransformation = PasswordVisualTransformation()
+        )
         Row {
-            MaterialButton(label = "Register")
-            MaterialButton(label = "Login")
+            MaterialButton(label = stringResource(R.string.register), onClick = onRegisterClick)
+            MaterialButton(
+                label = stringResource(R.string.login),
+                enable = correctInput,
+                onClick = {
+                    onLoginClick(login, pass)
+                })
         }
     }
 }
 
-@Composable
-fun MaterialButton(label: String) {
-    Button(
-        onClick = { /*TODO*/ },
-        elevation = ButtonDefaults.elevatedButtonElevation(6.dp),
-        modifier = Modifier.padding(8.dp)
-    ) {
-        Text(
-            text = label,
-            color = Color.White
-        )
-    }
-}
-
-@Composable
-fun InputText(label: String) {
-    var text by rememberSaveable { mutableStateOf("") }
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = MaterialTheme.colors.primary,
-            textColor = MaterialTheme.colors.onPrimary
-        ),
-        modifier = Modifier.padding(8.dp),
-        label = { Text(label, color = Blue) },
-        shape = RoundedCornerShape(8.dp)
-    )
-}
+fun validateLoginInput(login: String, pass: String) =
+    Patterns.EMAIL_ADDRESS.matcher(login).matches() && pass.length >= 3
 
 @Preview(showBackground = true, widthDp = 320)
 @Composable
 fun DefaultPreview() {
     RoomDaoTheme {
-        LoginScreen()
+        LoginScreen({ }) { _, _ -> }
     }
 }

@@ -3,4 +3,24 @@
     <string name="login_or">Login or register</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
+    <string name="you_list_is_empty">You shopping list is empty</string>
+    <string name="add_shop_list">Add new shopping list</string>
+    <string name="shopping_lists">Shopping lists</string>
+    <string name="to_wish_list_button">To wish list button</string>
+    <string name="register">Register</string>
+    <string name="email">Email</string>
+    <string name="create_new_shop_list">Create a new shopping list</string>
+    <string name="list_name">List name*</string>
+    <string name="short_description">Short description*</string>
+    <string name="expected_price">Expected price</string>
+    <string name="description_two_dots">Description:</string>
+    <string name="date_of_creation">Date of creation</string>
+    <string name="expected_amount">Expected amount of purchases</string>
+    <string name="not_limited">Not limited</string>
+    <string name="status">Status</string>
+    <string name="setting_icon">Setting icon</string>
+    <string name="products_two_dots">Products:</string>
+    <string name="set_status">Set status</string>
+    <string name="cancel">Cancel</string>
+    <string name="set_list_status">Set shopping list status</string>
 </resources>

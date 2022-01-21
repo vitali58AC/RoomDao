@@ -2,6 +2,9 @@ package com.example.roomdao.data
 
 enum class Screens {
     Login,
+    Register,
     ShoppingList,
-    Profile
+    Profile,
+    AddShoppingList,
+    DetailShoppingList
 }

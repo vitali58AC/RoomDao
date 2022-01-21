@@ -2,6 +2,7 @@ package com.example.roomdao.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import com.example.roomdao.data.db.dao.ProductDao
 import com.example.roomdao.data.db.dao.ShoppingListDao
 import com.example.roomdao.data.db.dao.UserDao
 import com.example.roomdao.data.db.models.product.Products
@@ -29,6 +30,7 @@ abstract class RoomDaoDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
     abstract fun shoppingListDao(): ShoppingListDao
+    abstract fun productDao(): ProductDao
 
     companion object {
         const val DB_VERSION = 1
@@ -36,7 +38,7 @@ abstract class RoomDaoDatabase : RoomDatabase() {
     }
 }
 
-//Так, я реализовал время и статус, далее добавить товары и пора реализовывать экраны и
+//Так, я реализовал время и статус, пора реализовывать экраны и
 // саму работу с табилцей
 //И разобраться с FK!!
 //Так, все таблицы добавлены, разбирайся с FK и делай экраны для списка покупок.

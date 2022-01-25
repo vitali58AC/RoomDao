@@ -1,11 +1,13 @@
 package com.example.roomdao.data.db.dao
 
 import androidx.room.*
+import com.example.roomdao.data.db.models.product.ProductContract
 import com.example.roomdao.data.db.models.user.User
 import com.example.roomdao.data.db.models.user.UserAndProfile
 import com.example.roomdao.data.db.models.user.UserContract
 import com.example.roomdao.data.db.models.user.UserProfile
-import com.example.roomdao.data.db.models.wish_list.UserProfileWithProducts
+import com.example.roomdao.data.db.models.wish_list.UserProductsCrossRef
+import com.example.roomdao.data.db.models.wish_list.UserWithProducts
 
 @Dao
 interface UserDao {
@@ -15,7 +17,7 @@ interface UserDao {
 
     //В случае конфликта, user будет заменён
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(users: List<User>)
+    suspend fun insertUser(users: List<User>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserProfile(userProfiles: List<UserProfile>)
@@ -46,6 +48,12 @@ interface UserDao {
     fun getUserAndUserProfile(): List<UserAndProfile>
 
     @Transaction
-    @Query("SELECT * FROM ${UserContract.TABLE_PROFILE}")
-    fun getProductsWishListProducts(): List<UserProfileWithProducts>
+    @Query("SELECT * FROM ${UserContract.TABLE_NAME} WHERE ${UserContract.Columns.USER_ID} = :userId")
+    fun getUserWishListProducts(userId: Long): kotlinx.coroutines.flow.Flow<List<UserWithProducts>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUserWishListProducts(relation: UserProductsCrossRef)
+
+    @Query("DELETE FROM UserProductsCrossRef WHERE ${UserContract.Columns.USER_ID} = :userId AND ${ProductContract.Columns.PRODUCT_ID} = :productId")
+    suspend fun deleteUserWishListProducts(userId: Long, productId: Long)
 }

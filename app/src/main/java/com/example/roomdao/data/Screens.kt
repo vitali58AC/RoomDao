@@ -6,5 +6,6 @@ enum class Screens {
     ShoppingList,
     Profile,
     AddShoppingList,
-    DetailShoppingList
+    DetailShoppingList,
+    WishList
 }

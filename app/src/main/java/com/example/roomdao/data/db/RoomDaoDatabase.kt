@@ -11,9 +11,8 @@ import com.example.roomdao.data.db.models.shopping_list.ShoppingList
 import com.example.roomdao.data.db.models.shopping_list.UserShoppingListCrossRef
 import com.example.roomdao.data.db.models.user.User
 import com.example.roomdao.data.db.models.user.UserProfile
-import com.example.roomdao.data.db.models.wish_list.UserProfileProductsCrossRef
+import com.example.roomdao.data.db.models.wish_list.UserProductsCrossRef
 
-//Возможно в entities не хватает классов, или есть лишние
 @Database(
     entities = [
         User::class,
@@ -22,7 +21,7 @@ import com.example.roomdao.data.db.models.wish_list.UserProfileProductsCrossRef
         UserShoppingListCrossRef::class,
         Products::class,
         ShoppingListProductCrossRef::class,
-        UserProfileProductsCrossRef::class
+        UserProductsCrossRef::class
     ],
     version = RoomDaoDatabase.DB_VERSION
 )
@@ -33,14 +32,9 @@ abstract class RoomDaoDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao
 
     companion object {
-        const val DB_VERSION = 1
+        const val DB_VERSION = 2
         const val DB_NAME = "room-dao-data"
     }
 }
-
-//Так, я реализовал время и статус, пора реализовывать экраны и
-// саму работу с табилцей
-//И разобраться с FK!!
-//Так, все таблицы добавлены, разбирайся с FK и делай экраны для списка покупок.
 
 

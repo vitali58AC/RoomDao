@@ -28,14 +28,16 @@ import com.example.roomdao.ui.theme.RoomDaoTheme
 fun ShoppingListScreen(
     shoppingList: List<ShoppingList> = emptyList(),
     onShoppingListClick: (ShoppingList) -> Unit,
-    onAddShopListClick: () -> Unit
+    onAddShopListClick: () -> Unit,
+    onWishListClick: () -> Unit
 ) {
     Scaffold(
         floatingActionButton = { FABButton(onAddShopListClick) },
         topBar = {
             MyTopAppBar(
                 title = stringResource(R.string.shopping_lists),
-                icon = { FavoriteIcon() }
+                icon = { FavoriteIcon() },
+                onIconClick = { onWishListClick() }
             )
         }
     ) {
@@ -89,7 +91,9 @@ fun ShoppingListPreview() {
     RoomDaoTheme {
         ShoppingListScreen(
             shoppingList = ShoppingListExample.list,
-            onShoppingListClick = { }
-        ) { }
+            onShoppingListClick = { },
+            onAddShopListClick = {},
+            onWishListClick = {}
+        )
     }
 }

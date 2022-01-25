@@ -20,7 +20,14 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+    //Говорим room, что нужно сгенерировать схему и класть её в папку schemas
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
+
 
     buildTypes {
         release {
@@ -95,7 +102,7 @@ dependencies {
     def room_version = '2.4.0'
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
-    //implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
     androidTestImplementation "androidx.room:room-testing:$room_version"
 
     //Compose material3

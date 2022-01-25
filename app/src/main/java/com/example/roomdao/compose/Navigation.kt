@@ -1,6 +1,7 @@
 package com.example.roomdao.compose
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -14,7 +15,9 @@ import com.example.roomdao.compose.shopping_lists.AddShoppingListScreen
 import com.example.roomdao.compose.shopping_lists.DetailShoppingList
 import com.example.roomdao.compose.shopping_lists.ShoppingListScreen
 import com.example.roomdao.compose.user_profile.UserProfileScreen
+import com.example.roomdao.compose.wish_list.WishListScreen
 import com.example.roomdao.data.Screens
+import com.example.roomdao.presentaion.ProductsViewModel
 import com.example.roomdao.presentaion.ShoppingListViewModel
 import com.example.roomdao.presentaion.UserViewModel
 
@@ -23,6 +26,7 @@ fun Navigation(
     navController: NavHostController,
     userViewModel: UserViewModel,
     shoppingListViewModel: ShoppingListViewModel,
+    productsViewModel: ProductsViewModel,
     context: Context
 ) {
     NavHost(
@@ -54,13 +58,13 @@ fun Navigation(
                     }
                 },
                 onRegisterClick = { args ->
-                    if (args[3].isNotEmpty()) {
+                    if (args[4].isNotEmpty()) {
 
-                        userViewModel.checkEmail(args[3]) { userExists ->
+                        userViewModel.checkEmail(args[4]) { userExists ->
                             if (userExists) {
                                 Toast.makeText(
                                     context,
-                                    "User with email ${args[3]} is already exists",
+                                    "User with email ${args[4]} is already exists",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             } else {
@@ -78,15 +82,18 @@ fun Navigation(
             route = "${Screens.ShoppingList.name}/{id}",
             arguments = listOf(navArgument("id") { type = NavType.LongType })
         ) { entry ->
-            val currentId = entry.arguments?.getLong("id") ?: -1L
-            SideEffect(shoppingListViewModel::getUserShopList, currentId)
+            val userId = entry.arguments?.getLong("id") ?: -1L
+            SideEffect(shoppingListViewModel::getUserShopList, userId)
             ShoppingListScreen(
                 shoppingList = shoppingListViewModel.shoppingLists,
                 onShoppingListClick = { shoppingList ->
-                    navController.navigate("${Screens.DetailShoppingList.name}/${shoppingList.id}")
+                    navController.navigate("${Screens.DetailShoppingList.name}/${shoppingList.id}/${userId}")
                 },
                 onAddShopListClick = {
-                    navController.navigate("${Screens.AddShoppingList.name}/$currentId")
+                    navController.navigate("${Screens.AddShoppingList.name}/$userId")
+                },
+                onWishListClick = {
+                    navController.navigate("${Screens.WishList.name}/$userId")
                 }
             )
         }
@@ -108,16 +115,46 @@ fun Navigation(
             )
         }
         composable(
-            route = "${Screens.DetailShoppingList.name}/{id}",
-            arguments = listOf(navArgument("id") { type = NavType.LongType })
+            route = "${Screens.DetailShoppingList.name}/{shoppingListId}/{userId}",
+            arguments = listOf(
+                navArgument("shoppingListId") { type = NavType.LongType },
+                navArgument("userId") { type = NavType.LongType }
+            )
         ) { entry ->
-            val shoppingListId = entry.arguments?.getLong("id") ?: -1L
+            val shoppingListId = entry.arguments?.getLong("shoppingListId") ?: -1L
+            val userId = entry.arguments?.getLong("userId") ?: -1L
+            Log.e("navigation", "shop id $shoppingListId userID $userId")
+            SideEffect(func = productsViewModel::getProductList, currentId = shoppingListId)
+            SideEffect(func = userViewModel::getWishListProducts, currentId = userId)
             DetailShoppingList(
                 shoppingList = shoppingListViewModel.getCurrentShoppingList(shoppingListId),
-               //Нужно придумать как обновить статус на UI
-                //Наверное нужно через @Update в DAO вставить новый shop list
-                //И Заново вызвать получение списков
-                onSettingClick = {}
+                productsList = productsViewModel.productList,
+                wishListProducts = userViewModel.productList,
+                onSettingClick = { statusShoppingList ->
+                    shoppingListViewModel.updateShoppingList(shoppingListId, statusShoppingList)
+                },
+                onAddProductClick = { products ->
+                    productsViewModel.saveProduct(products, shoppingListId)
+                },
+                onAddToWishListClick = { productId ->
+                    userViewModel.saveUserProducts(userId, productId)
+                },
+                onDeleteFromWishListClick = { productId ->
+                    userViewModel.deleteUserProducts(userId, productId)
+                }
+            )
+        }
+        composable(
+            route = "${Screens.WishList.name}/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.LongType })
+        ) { entry ->
+            val userId = entry.arguments?.getLong("id") ?: -1L
+            SideEffect(func = userViewModel::getWishListProducts, currentId = userId)
+            WishListScreen(
+                productsList = userViewModel.productList,
+                onDeleteFromWishListClick = { productId ->
+                    userViewModel.deleteUserProducts(userId, productId)
+                }
             )
         }
     }

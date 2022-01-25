@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Entity(
     tableName = UserContract.TABLE_NAME,
-    //Для того, что бы сделать поле уникальным, нужно добавить на него индекс
+    //Для того, чтобы сделать поле уникальным, нужно добавить на него индекс
     indices = [Index(UserContract.Columns.EMAIL, unique = true)]
 )
 data class User(

@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.graphics.toArgb
 import androidx.navigation.compose.rememberNavController
 import com.example.roomdao.compose.Navigation
+import com.example.roomdao.presentaion.ProductsViewModel
 import com.example.roomdao.presentaion.ShoppingListViewModel
 import com.example.roomdao.presentaion.UserViewModel
 import com.example.roomdao.ui.theme.RoomDaoTheme
@@ -17,6 +18,7 @@ class MainActivity : ComponentActivity() {
 
     private val userViewModel: UserViewModel by viewModels()
     private val shoppingListViewModel: ShoppingListViewModel by viewModels()
+    private val productViewModel: ProductsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +31,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         userViewModel = userViewModel,
                         shoppingListViewModel = shoppingListViewModel,
+                        productsViewModel = productViewModel,
                         context = this
                     )
                 }

@@ -28,5 +28,7 @@ data class UserProfile(
     @ColumnInfo(name = UserContract.Columns.AVATAR)
     val avatar: String?,
     @ColumnInfo(name = UserContract.Columns.USER_OWNER_ID)
-    val userOwnerId: Long
+    val userOwnerId: Long,
+    @ColumnInfo(name = UserContract.Columns.AGE, defaultValue = "0")
+    val age: Int
 )

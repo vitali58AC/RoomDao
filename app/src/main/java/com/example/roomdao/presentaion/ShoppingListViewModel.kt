@@ -1,13 +1,13 @@
 package com.example.roomdao.presentaion
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roomdao.data.db.models.shopping_list.ShoppingList
 import com.example.roomdao.data.db.models.shopping_list.ShoppingListRepository
+import com.example.roomdao.data.db.models.status.StatusShoppingList
 import kotlinx.coroutines.launch
 
 class ShoppingListViewModel : ViewModel() {
@@ -16,14 +16,12 @@ class ShoppingListViewModel : ViewModel() {
 
     var shoppingLists = mutableStateListOf<ShoppingList>()
     val createProgress = mutableStateOf(false)
-    var currentShoppingList: MutableState<ShoppingList?> = mutableStateOf(null)
-
 
     fun getUserShopList(userId: Long) {
-        shoppingLists = mutableStateListOf()
         viewModelScope.launch {
             try {
                 val shoppingList = repository.getUserShoppingList(userId).shoppingLists
+                shoppingLists = mutableStateListOf()
                 shoppingLists.addAll(shoppingList)
             } catch (t: Throwable) {
                 Log.e("shop_list_viewModel", "error with get user's shop list ${t.message}")
@@ -48,6 +46,21 @@ class ShoppingListViewModel : ViewModel() {
 
     fun getCurrentShoppingList(shoppingListId: Long): ShoppingList {
         return shoppingLists.first { it.id == shoppingListId }
+    }
+
+    fun updateShoppingList(id: Long, statusShoppingList: StatusShoppingList) {
+        viewModelScope.launch {
+            try {
+                val oldShoppingList = getCurrentShoppingList(id)
+                val updatedShoppingList = oldShoppingList.copy(status = statusShoppingList)
+                repository.updateShoppingList(updatedShoppingList)
+                shoppingLists.remove(oldShoppingList)
+                shoppingLists.add(updatedShoppingList)
+
+            } catch (t: Throwable) {
+                Log.e("shop_list_viewModel", "error with update shop list ${t.message}")
+            }
+        }
     }
 
 }

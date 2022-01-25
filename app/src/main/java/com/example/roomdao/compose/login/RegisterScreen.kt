@@ -32,6 +32,7 @@ fun RegisterScreen(
 ) {
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
+    var age by rememberSaveable { mutableStateOf("") }
     var avatar by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -48,6 +49,7 @@ fun RegisterScreen(
         item {
             InputText(text = firstName, onChange = { firstName = it }, label = "First name")
             InputText(text = lastName, onChange = { lastName = it }, label = "Last name")
+            InputText(text = age, onChange = { age = it }, label = "Age")
             InputText(text = avatar, onChange = { avatar = it }, label = "Avatar url")
             InputText(
                 text = email,
@@ -69,7 +71,7 @@ fun RegisterScreen(
                 progress = registerProgress,
                 onCancelClick = onCancelClick,
                 onActionClick = {
-                    onRegisterClick(listOf(firstName, lastName, avatar, email, password))
+                    onRegisterClick(listOf(firstName, lastName, age, avatar, email, password))
                 }
             )
         }

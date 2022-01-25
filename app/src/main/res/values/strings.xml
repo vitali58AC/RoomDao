@@ -23,4 +23,6 @@
     <string name="set_status">Set status</string>
     <string name="cancel">Cancel</string>
     <string name="set_list_status">Set shopping list status</string>
+    <string name="add_icon">Add icon</string>
+    <string name="products_can_be_here">Your favorite products may be here.</string>
 </resources>

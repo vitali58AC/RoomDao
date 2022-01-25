@@ -1,8 +1,12 @@
 package com.example.roomdao.data.db.models.user
 
 import android.util.Patterns
+import androidx.room.withTransaction
 import com.example.roomdao.data.db.Database
+import com.example.roomdao.data.db.models.wish_list.UserProductsCrossRef
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 
 class UserRepository {
 
@@ -21,14 +25,13 @@ class UserRepository {
         user: User,
         name: String,
         lastName: String,
+        age: String,
         avatar: String?,
         callback: (Long) -> Unit
     ) {
-        userDao.insertUser(listOf(user))
-        //Это что б room успел создать User таблицу
-        delay(1000L)
-        val currentUser = userDao.getUserByEmail(user.email)
-        if (currentUser != null) {
+        //Ошибка тут
+        //Database.instance.withTransaction {
+            val userId = userDao.insertUser(listOf(user))
             userDao.insertUserProfile(
                 listOf(
                     UserProfile(
@@ -36,12 +39,13 @@ class UserRepository {
                         name,
                         lastName,
                         avatar,
-                        currentUser.userId
+                        userId[0],
+                        age.toIntOrNull() ?: 0
                     )
                 )
             )
-            callback(currentUser.userId)
-        }
+            callback(userId[0])
+        //}
     }
 
     suspend fun saveUserProfile(userProfile: UserProfile) {
@@ -60,6 +64,14 @@ class UserRepository {
         if (isUserValid(user).not()) throw Exception("Incorrect user in save method")
         userDao.updateUser(user)
     }
+
+    suspend fun getUserWithProducts(userId: Long) = userDao.getUserWishListProducts(userId)
+
+    suspend fun saveUserWithProductsCrossRef(userId: Long, productId: Long) =
+        userDao.insertUserWishListProducts(UserProductsCrossRef(userId, productId))
+
+    suspend fun deleteUserWithProductsCrossRef(userId: Long, productId: Long) =
+        userDao.deleteUserWishListProducts(userId, productId)
 
     private fun isUserValid(user: User): Boolean {
         return user.passwordHash.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(

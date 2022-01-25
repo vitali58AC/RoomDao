@@ -16,6 +16,10 @@ object Database {
             context,
             RoomDaoDatabase::class.java,
             RoomDaoDatabase.DB_NAME
-        ).build()
+        )
+            .addMigrations(MIGRATION_1_2)
+            //Полностью пересоздаёт DB, только для разработки! Нельзя оставлять для проекта
+            //.fallbackToDestructiveMigration()
+            .build()
     }
 }

@@ -65,7 +65,7 @@ class UserRepository {
         userDao.updateUser(user)
     }
 
-    suspend fun getUserWithProducts(userId: Long) = userDao.getUserWishListProducts(userId)
+    fun getUserWithProducts(userId: Long) = userDao.getUserWishListProducts(userId)
 
     suspend fun saveUserWithProductsCrossRef(userId: Long, productId: Long) =
         userDao.insertUserWishListProducts(UserProductsCrossRef(userId, productId))

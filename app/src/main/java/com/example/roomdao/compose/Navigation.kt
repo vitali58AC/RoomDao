@@ -75,7 +75,8 @@ fun Navigation(
                         }
                     }
                 },
-                registerProgress = userViewModel.registerProgress.value
+                registerProgress =
+                userViewModel.registerProgress.value
             )
         }
         composable(
